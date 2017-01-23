@@ -1,7 +1,9 @@
-package com.hortonworks.orendainx.trucking.webapp
+package com.orendainx.hortonworks.trucking.webapp
 
 import angulate2.std.{Component, OnInit}
 import com.felstar.scalajs.leaflet._
+import com.orendainx.hortonworks.trucking.webapp.PrettyTruckAndTrafficData
+
 import scala.collection.mutable
 
 /**

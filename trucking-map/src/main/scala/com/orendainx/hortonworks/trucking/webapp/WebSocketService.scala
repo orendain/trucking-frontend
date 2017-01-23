@@ -1,4 +1,4 @@
-package com.hortonworks.orendainx.trucking.webapp
+package com.orendainx.hortonworks.trucking.webapp
 
 import angulate2.std.Injectable
 import org.scalajs.dom.raw.{CloseEvent, ErrorEvent, Event, MessageEvent, WebSocket}

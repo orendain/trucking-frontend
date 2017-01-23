@@ -1,6 +1,3 @@
-//import de.surfice.angulate2.sbtplugin.Angulate2Plugin.autoImport.ngBootstrap
-import com.scalapenos.sbt.prompt.SbtPrompt.autoImport.{promptTheme, _}
-
 name := "trucking-frontend"
 
 version := "0.3"
@@ -10,21 +7,10 @@ lazy val ngVersion = "2.4.3"
 
 lazy val webapp = (project in file(".")).
   settings(
-
-//    name := "scalapenos-theme",
-//    version := "0.1",
-//    description := """This project has been configured with the fancy Scalapenos theme, which
-//                      needs special font support to render correctly.
-//                      See the README for more details.""",
-//    startYear := Some(2014),
-//    homepage := Some(url("https://github.com/agemooij/sbt-prompt")),
-//    organization := "com.scalapenos",
-//    organizationHomepage := Some(url("http://scalapenos.com/")),
-//    licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
     promptTheme := ScalapenosTheme
   )
 
-lazy val server = (project in file("server")).settings(
+lazy val webApp = (project in file("trucking-web-app")).settings(
   scalaVersion := scalaV,
   scalaJSProjects := Seq(map),
 
@@ -39,6 +25,7 @@ lazy val server = (project in file("server")).settings(
   // triggers scalaJSPipeline when using compile or continuous compilation
   compile in Compile <<= (compile in Compile) dependsOn scalaJSPipeline,
   //compile in Compile <<= (compile in Compile) dependsOn (fastOptJS in (map, Compile)),
+  resolvers += Resolver.mavenLocal,
   libraryDependencies ++= Seq(
     filters,
     cache,
@@ -64,14 +51,20 @@ lazy val server = (project in file("server")).settings(
     "org.webjars.npm" % "symbol-observable" % "1.0.4",
 
     "org.webjars.bower" % "compass-mixins" % "0.12.10",
-    "org.webjars.bower" % "bootstrap-sass" % "3.3.6"
+    "org.webjars.bower" % "bootstrap-sass" % "3.3.6",
+
+
+    "com.orendainx.hortonworks" %% "trucking-topology" % "0.3.2",
+    "org.apache.storm" % "storm-core" % "1.0.2"
   ),
 
-  promptTheme := ScalapenosTheme,
+  scalacOptions += "-Yresolve-term-conflict:package",
+
+    promptTheme := ScalapenosTheme,
   shellPrompt := (state ⇒ promptTheme.value.render(state))
 ).enablePlugins(PlayScala)
 
-lazy val map = (project in file("trucking-map")).settings(
+lazy val webAppFrontend = (project in file("trucking-web-app/frontend")).settings(
   name := "trucking-map",
   scalaVersion := scalaV,
   //persistLauncher := true,
@@ -79,7 +72,7 @@ lazy val map = (project in file("trucking-map")).settings(
   resolvers += "jitpack" at "https://jitpack.io",
   libraryDependencies ++= Seq(
     //"org.scala-js" %%% "scalajs-dom" % "0.9.1",
-    "com.hortonworks.orendainx" %% "trucking-shared" % "0.3",
+    "com.orendainx.hortonworks" %% "trucking-common" % "0.3.2",
     "com.github.fancellu.scalajs-leaflet" % "scalajs-leaflet_sjs0.6_2.11" % "v0.1",
     "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M6"
   ),
@@ -87,7 +80,7 @@ lazy val map = (project in file("trucking-map")).settings(
     "org.webjars.npm" % "leaflet" % "1.0.2" / "leaflet.js" commonJSName "Leaflet"
   ),
   //ngBootstrap := Some("Frontend") //qualified name (including packages) of Scala class called NAME_OF_THE_MODULE_TO_BOOTSTRAP
-  ngBootstrap := Some("com.hortonworks.orendainx.trucking.webapp.AppModule") //qualified name (including packages) of Scala class called NAME_OF_THE_MODULE_TO_BOOTSTRAP
+  ngBootstrap := Some("com.orendainx.hortonworks.trucking.webapp.AppModule") //qualified name (including packages) of Scala class called NAME_OF_THE_MODULE_TO_BOOTSTRAP
 ).enablePlugins(ScalaJSPlugin, ScalaJSWeb, Angulate2Plugin)
 
 // loads the server project at sbt startup
