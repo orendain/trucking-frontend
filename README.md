@@ -2,4 +2,4 @@
 
  This project has been integrated into the larger [Trucking IoT project](https://github.com/orendain/trucking-iot).
  
- *See **https://github.com/orendain/trucking-iot** for the latest developments.*
+ _See **https://github.com/orendain/trucking-iot** for the latest developments._
